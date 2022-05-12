@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-const routerHistory = createWebHistory()
+const routerHistory = createWebHistory('/taildwind-vue-fb/')
 // createWebHashHistory hash 路由
 // createWebHistory history 路由
 // createMemoryHistory 带缓存 history 路由
