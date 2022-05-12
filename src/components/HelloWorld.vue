@@ -26,7 +26,7 @@
             class="opacity-0 w-full absolute left-0 z-10 cursor-pointer"
             @change="previewImage"
           />
-          <span>上傳圖片</span>
+          <span>上傳圖片!</span>
         </div>
         <div class="w-full border-2 border-black rounded-lg h-40 mb-6">
           <img :src="data.preview" class="h-full" />
