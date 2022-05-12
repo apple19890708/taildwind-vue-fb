@@ -26,7 +26,7 @@
             class="opacity-0 w-full absolute left-0 z-10 cursor-pointer"
             @change="previewImage"
           />
-          <span>上傳圖片!</span>
+          <span>上傳圖片</span>
         </div>
         <div class="w-full border-2 border-black rounded-lg h-40 mb-6">
           <img :src="data.preview" class="h-full" />
@@ -74,17 +74,19 @@ const previewImage = (event) => {
 
 </script>
 
-<style>
-.shadow-block::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background-color: #fff;
-  border: 2px solid #000040;
-  bottom: 2px;
-  left: 2px;
-  z-index: -1;
-  box-sizing: content-box;
+<style lang="scss">
+.shadow-block{
+  &::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    border: 2px solid #000040;
+    bottom: 2px;
+    left: 2px;
+    z-index: -1;
+    box-sizing: content-box;
+  }
 }
 </style>
