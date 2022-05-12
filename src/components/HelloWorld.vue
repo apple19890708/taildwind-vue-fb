@@ -74,10 +74,9 @@ const previewImage = (event) => {
 
 </script>
 
-<style lang="scss">
-.shadow-block{
-  &::after {
-    content: "";
+<style>
+.shadow-block::after {
+  content: "";
   position: absolute;
   width: 100%;
   height: 100%;
@@ -87,7 +86,5 @@ const previewImage = (event) => {
   left: 2px;
   z-index: -1;
   box-sizing: content-box;
-  }
-  
 }
 </style>
