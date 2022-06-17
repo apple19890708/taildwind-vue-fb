@@ -9,3 +9,8 @@ export const signIn = (data) => aepAxios({
   data,
   url: `${API_URL}/users/sign_in`,
 }).then(({ data: resData }) => resData);
+
+export const getProfile = () => aepAxios({
+  method: 'get',
+  url: `${API_URL}/users/profile`,
+}).then(( data ) => data);

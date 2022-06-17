@@ -1,8 +1,9 @@
 import { aepAxios } from './aepBaseApi';
 // import apiPost from './apiPost';
-import { signIn } from './apiUser';
+import { signIn, getProfile } from './apiUser';
 
 export {
 	signIn,
+	getProfile
 }
 

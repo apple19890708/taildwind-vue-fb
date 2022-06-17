@@ -9,13 +9,13 @@
 
     <ul class="ml-2 flex flex-col">
       <li>
-        <RouterLink to="#" class="mb-5 flex items-center">
+        <RouterLink :to="userPageUrl" class="mb-5 flex items-center">
           <AvatarVue size="50" :imgUrl="imgUrl" class="cursor-pointer" />
           <h3 class="ml-4 font-bold">{{ name }}</h3>
         </RouterLink>
       </li>
       <li>
-        <RouterLink to="#" class="mb-5 flex items-center">
+        <RouterLink to="/follow" class="mb-5 flex items-center">
           <IconButtonVue size="50">
             <IconBellVue class="h-6 w-6" />
           </IconButtonVue>

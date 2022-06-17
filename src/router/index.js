@@ -26,6 +26,11 @@ const router = createRouter({
           name: 'likes',
           component: () => import('../views/FrontPage/LikesView.vue'),
         },
+        {
+          path: '/profile/:id',
+          name: 'profile',
+          component: () => import('../views/FrontPage/UserView.vue'),
+        },
       ]
     },
     {

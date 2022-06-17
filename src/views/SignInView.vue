@@ -46,12 +46,11 @@ function resetData() {
   form.value.password = '';
   isSending.value = false;
 }
-const signIns = async () => {
+const Login = async () => {
   signIn(form.value)
     .then((res) => {
-      console.log('123');
-      localStorage.setItem('metaWall', res.headers.authorization);
-      router.push({ name: 'posts' });
+      localStorage.setItem('metaWall', `Bearer ${res.data.token}`);
+      router.push({ name: 'post' });
     })
     .catch(() => {
       errorMessage.value = '登入失敗，帳號或密碼錯誤';
@@ -64,7 +63,7 @@ const displayHexSchoolDialog = ref(false);
 </script>
 
 <template>
-  <ul class="w-full" @keyup.enter.exact="signIns">
+  <ul class="w-full" @keyup.enter.exact="Login">
     <li class="mb-8 w-full text-center text-2xl font-bold">
       到元宇宙展開全新社交圈
     </li>
@@ -87,7 +86,7 @@ const displayHexSchoolDialog = ref(false);
     <li class="mb-4 w-full">
       <button
         class="flex w-full items-center justify-center rounded-lg border-2 border-black bg-primary py-2 text-lg text-white hover:bg-warning hover:text-black disabled:bg-disabled"
-        @click="signIns"
+        @click="Login"
         :disabled="isSending"
       >
         <span>登入</span>
