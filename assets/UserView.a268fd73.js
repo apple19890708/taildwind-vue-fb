@@ -1,1 +1,0 @@
-import{_ as e,o,c as r,e as s}from"./index.ed2a901c.js";const t={},c={class:"relative mb-4"},a=s("div",{class:"absolute top-1 right-1 -z-10 h-full w-full rounded-lg border-2 border-black bg-white"}," profile ",-1),l=[a];function _(d,i){return o(),r("div",c,l)}var f=e(t,[["render",_]]);export{f as default};
