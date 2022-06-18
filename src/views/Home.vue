@@ -14,7 +14,7 @@
         <div class="hidden md:block">
           <SideMenu
             :name="userStore.user.name"
-            :avatar="userStore.user.photo"
+            :avatar="userStore.user.avatar"
             :userPageUrl="'/profile/' + userStore.user.id"
           />
         </div>
@@ -47,7 +47,7 @@ onMounted(() => {
     .then((res) => {
       const userInfo = {
         name: res.data.user.name,
-        avator: res.data.user.photo,
+        avatar: res.data.user.photo,
         role: res.data.user.role,
         id: res.data.user._id,
       }

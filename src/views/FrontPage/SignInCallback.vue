@@ -9,13 +9,13 @@ if (
   route.query.token &&
   route.query.id &&
   route.query.name &&
-  route.query.avatar
+  route.query.avator
 ) {
   localStorage.setItem('metaWall', `Bearer ${route.query.token}`);
   const userInfo = {
     id: route.query.id,
     name: route.query.name,
-    avator: route.query.avatar
+    avatar: route.query.avator
   };
   userStore.updateUser(userInfo);
   router.push({ name: 'post' });
