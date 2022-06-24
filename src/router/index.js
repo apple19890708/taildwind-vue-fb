@@ -14,6 +14,7 @@ const router = createRouter({
         {
           path: '/',
           name: 'post',
+          meta: { requiresAuth: true },
           component: () => import('../views/PostView.vue'),
         },
         {
@@ -50,6 +51,21 @@ const router = createRouter({
       ],
     },
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  const isLogin = JSON.parse(localStorage.getItem('isLogin'));
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (isLogin && to.fullPath) {
+      next();
+    } else {
+      next({ name: 'sign-in' })
+    }
+  } else if (isLogin && to.fullPath === '/sign-in') {
+    next({ name: 'post' })
+  } else {
+    next()
+  }
 })
  
 export default router

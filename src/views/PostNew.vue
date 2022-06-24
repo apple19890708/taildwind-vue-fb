@@ -15,16 +15,31 @@
       class="relative my-4 w-32 gap-y-8 rounded bg-black py-1 px-8 text-white"
     >
       <input
-        ref="inputDOM"
+        ref="uploadImages"
         type="file"
-        accept="image/*"
+        :accept="postValidates.fileType.join(', ')"
         class="absolute left-0 z-10 w-full cursor-pointer opacity-0"
         @change="previewImage"
+        multiple
       />
       <span>上傳圖片</span>
     </div>
-    <div class="mb-6 h-40 w-full rounded-lg border-2 border-black">
-      <img :src="data.preview" class="h-full" />
+    <div
+      :class="{
+        'items-center justify-center py-4': postData.previews.length === 0,
+        'grid-cols-2': postData.previews.length > 1,
+      }"
+      class="mb-4 grid w-full overflow-hidden rounded-lg border-2 border-black"
+    >
+      <template v-if="postData.previews.length > 0">
+        <div
+          v-for="(image, index) of postData.previews"
+          class="relative aspect-video hover:brightness-110"
+          :key="index"
+        >
+          <img :src="image" />
+        </div>
+      </template>
     </div>
     <div class="text-center">
       <div v-show="isWarnHint" class="text-red_x -mt-2 mb-2 mb-1 text-sm">
@@ -43,60 +58,56 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import CardTitle from '../components/CardTitle.vue';
-import axios from 'axios'
-
+import { useUserStore } from '@/stores';
+import { postNewPost } from '@/api'
+import { useRouter } from 'vue-router';
+const userStore = useUserStore();
+const uploadImages = ref();
 const postContent = ref("");
+const router = useRouter();
 
-const data = reactive({
+const postValidates = {
+  contentLength: 1,
+  fileNum: 10,
+  fileSize: 1024 * 1024,
+  fileType: ['image/jpg', 'image/jpeg', 'image/png'],
+};
+
+const postData = reactive({
   isWarnHint: false,
-  preview: null,
-  image: "",
+  previews: [],
+  images: [],
 });
 
 // const refData = toRefs(data);
-const previewImage = (event) => {
-  var input = event.target;
-  if (input.files) {
-    var reader = new FileReader();
+const previewImage = (e) => {
+  if (!uploadImages.value.files) {
+    return;
+  }
+  for (const file of uploadImages.value.files) {
+    const reader = new FileReader();
     reader.onload = (e) => {
-      data.preview = e.target.result;
+      postData.previews.push(e.target.result);
     };
-    console.log(input.files[0]);
-    data.image = input.files[0];
-    reader.readAsDataURL(input.files[0]);
+    reader.readAsDataURL(file);
+    postData.images.push(file);
   }
 };
 
-const submitPost = () => {
-  data.isWarnHint = true;
-  axios
-    .post("https://mysterious-cove-77258.herokuapp.com/posts", {
-      avatar:
-        "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/377.jpg",
-      content: postContent.value,
-      updateImage: data.preview,
-    })
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+const submitPost = async () => {
+  postData.isWarnHint = true;
+  try {
+    const form = new FormData();
+    form.append('content', postContent.value);
+    postData.images.forEach((image) => {
+    form.append('photos', image);
+  });
+    const res = await postNewPost(form);
+    router.push({ name : 'post'});
+  } catch (error) {
+    console.log('error', error)
+  }
 };
-
-function getPosts() {
-  axios.get("https://mysterious-cove-77258.herokuapp.com/posts")
-    .then((res) => {
-      console.log(res.data)
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
-
-onMounted(() => {
-  getPosts();
-});
 
 </script>
 

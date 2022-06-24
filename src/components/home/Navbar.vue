@@ -5,13 +5,36 @@
         <h1 class="font-paytone text-3xl text-black">
           <RouterLink to="/"> MetaWall </RouterLink>
         </h1>
-        <div class="flex items-center">
-          <Avatar size="30" :imgUrl="avatar" />
-          <h2
-            class="ml-2.5 border-b-2 border-black font-azeret font-bold text-black"
-          >
-            {{ name }}
-          </h2>
+        <div class="relative h-full">
+          <div class="reference flex h-full cursor-pointer items-center">
+            <Avatar size="30" :imgUrl="avatar" />
+            <h2
+              class="ml-2.5 border-b-2 border-black font-azeret font-bold text-black"
+            >
+              {{ name }}
+            </h2>
+            <div
+              class="user-menu absolute right-0 top-[calc(100%-4px)] z-50 grid w-[180px] border-2 border-black text-center"
+            >
+              <router-link
+                :to="userPageUrl"
+                class="bg-white py-2 hover:bg-secondary"
+                >我的貼文牆</router-link
+              >
+              <router-link
+                to="/profile/settings"
+                class="border-t-2 border-b-2 border-black bg-white py-2 hover:bg-secondary"
+                >修改個人資料</router-link
+              >
+              <button
+                type="button"
+                class="bg-white py-2 hover:bg-secondary"
+                @click="signOut"
+              >
+                登出
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -33,6 +56,7 @@
 <script setup>
 import { RouterLink, useRouter } from 'vue-router';
 import Avatar from '../Avatar.vue';
+import { signOutUser } from '@/api'
 const router = useRouter();
 defineProps({
   avatar: {
@@ -47,4 +71,18 @@ defineProps({
     default: '#',
   },
 });
+
+const signOut = async () => {
+  try {
+    const res = await signOutUser()
+    if (res.status) {
+      localStorage.removeItem('metaWall');
+      localStorage.removeItem('isLogin');
+      router.push({ name: 'sign-in' });
+    }
+  } catch (error) {
+    console.log('error', error)
+  }
+}
+
 </script>

@@ -2,10 +2,8 @@
 // import useVuelidate from '@vuelidate/core';
 // import { required, email, helpers } from '@vuelidate/validators';
 import { ref, computed } from 'vue';
-// import { apiUser } from '@/utils/apiUser';
 import { signIn } from '../api'
 import { useRouter } from 'vue-router';
-// import { useUserStore, useRoomStore } from '@/stores';
 import { API_URL } from '../global/constant';
 import ButtonIcon from '../components/ButtonIcon.vue';
 import IconGoogle from '@/components/icons/IconGoogle.vue';
@@ -13,9 +11,6 @@ import IconLoading from '../components/icons/IconLoading.vue';
 // import IconFacebook from '@/components/icons/IconFacebook.vue';
 // import IconHex from '@/components/icons/IconHex.vue';
 // import IconDiscord from '@/components/icons/IconDiscord.vue';
-// import HexSchool from '../../components/HexSchool.vue';
-// const userStore = useUserStore();
-// const roomStore = useRoomStore();
 const router = useRouter();
 const loginUrls = {
   google: `${API_URL}/users/google`,
@@ -50,6 +45,7 @@ const Login = async () => {
   signIn(form.value)
     .then((res) => {
       localStorage.setItem('metaWall', `Bearer ${res.data.token}`);
+      localStorage.setItem('isLogin', true);
       router.push({ name: 'post' });
     })
     .catch(() => {
@@ -59,11 +55,10 @@ const Login = async () => {
       }, 2000);
     });
 };
-const displayHexSchoolDialog = ref(false);
 </script>
 
 <template>
-  <ul class="w-full" @keyup.enter.exact="Login">
+  <ul class="w-full" @keyup.enter.exact="Login">  <!-- exact會限制只有單按「ctrl鍵」才能觸發事件 -->
     <li class="mb-8 w-full text-center text-2xl font-bold">
       到元宇宙展開全新社交圈
     </li>
@@ -128,11 +123,6 @@ const displayHexSchoolDialog = ref(false);
       <a :href="loginUrls.discord">
         <ButtonIcon size="50">
           <IconDiscord class="h-8 w-8"></IconDiscord>
-        </ButtonIcon>
-      </a>
-      <a @click.prevent="displayHexSchoolDialog = true">
-        <ButtonIcon size="50">
-          <IconHex class="h-8 w-8"></IconHex>
         </ButtonIcon>
       </a> -->
     </li>

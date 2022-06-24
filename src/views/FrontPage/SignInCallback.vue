@@ -12,6 +12,7 @@ if (
   route.query.avatar
 ) {
   localStorage.setItem('metaWall', `Bearer ${route.query.token}`);
+  localStorage.setItem('isLogin', true);
   const userInfo = {
     id: route.query.id,
     name: route.query.name,

@@ -36,13 +36,7 @@ import { ref, computed, onMounted } from 'vue';
   const userStore = useUserStore();
   const isLoading = ref(true);
 
-onMounted(() => {
-  if (userStore.name) {
-    isLoading.value = false;
-    return;
-  }
-
-  aepAxios.defaults.headers.common.Authorization = localStorage.getItem('metaWall');
+aepAxios.defaults.headers.common.Authorization = localStorage.getItem('metaWall');
   getProfile()
     .then((res) => {
       const userInfo = {
@@ -57,6 +51,13 @@ onMounted(() => {
     .catch(() => {
       router.replace('/sign-in');
     });
+onMounted(() => {
+  if (userStore.name) {
+    isLoading.value = false;
+    return;
+  }
+
+  
 });
 
 
