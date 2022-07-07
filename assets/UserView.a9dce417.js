@@ -1,1 +1,0 @@
-import{z as e,c as o,o as r,b as s}from"./index.7740a4a5.js";const t={},c={class:"relative mb-4"},a=s("div",{class:"absolute top-1 right-1 -z-10 h-full w-full rounded-lg border-2 border-black bg-white"}," profile ",-1),l=[a];function _(d,i){return r(),o("div",c,l)}var f=e(t,[["render",_]]);export{f as default};
