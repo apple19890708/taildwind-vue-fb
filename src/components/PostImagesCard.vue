@@ -45,7 +45,6 @@
 				</div>
 			</template>
 		</div>
-		<img :src="images" alt="">
 	</div>
 	<vue-easy-lightbox
     :visible="visible"

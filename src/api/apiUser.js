@@ -4,6 +4,12 @@ import { API_URL } from '../global/constant';
 
 // 權限管理---------------------------------------------
 
+export const signUp = (data) => aepAxios({
+  method: 'post',
+  data,
+  url: `${API_URL}/users/sign_up`,
+}).then(({ data: resData }) => resData);
+
 export const signIn = (data) => aepAxios({
   method: 'post',
   data,
@@ -19,3 +25,4 @@ export const signOutUser = () => aepAxios({
   method: 'post',
   url: `${API_URL}/users/sign_out`,
 }).then(( data ) => data);
+

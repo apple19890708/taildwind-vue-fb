@@ -48,6 +48,11 @@ const router = createRouter({
           name: 'callback',
           component: () => import('../views/FrontPage/SignInCallback.vue'),
         },
+        {
+          path: '/sign-up',
+          name: 'sign-up',
+          component: () => import('../views/FrontPage/SignUpView.vue'),
+        }
       ],
     },
   ]

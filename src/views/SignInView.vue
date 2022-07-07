@@ -1,62 +1,3 @@
-<script setup>
-// import useVuelidate from '@vuelidate/core';
-// import { required, email, helpers } from '@vuelidate/validators';
-import { ref, computed } from 'vue';
-import { signIn } from '../api'
-import { useRouter } from 'vue-router';
-import { API_URL } from '../global/constant';
-import ButtonIcon from '../components/ButtonIcon.vue';
-import IconGoogle from '@/components/icons/IconGoogle.vue';
-import IconLoading from '../components/icons/IconLoading.vue';
-// import IconFacebook from '@/components/icons/IconFacebook.vue';
-// import IconHex from '@/components/icons/IconHex.vue';
-// import IconDiscord from '@/components/icons/IconDiscord.vue';
-const router = useRouter();
-const loginUrls = {
-  google: `${API_URL}/users/google`,
-  facebook: `${API_URL}/users/facebook`,
-  discord: `${API_URL}/users/discord`,
-};
-const form = ref({
-  email: '',
-  password: '',
-});
-// const rules = computed(() => ({
-//   email: {
-//     required: helpers.withMessage('email 必填', required),
-//     email: helpers.withMessage('email 格式錯誤', email),
-//   },
-//   password: {
-//     required: helpers.withMessage('密碼必填', required),
-//     alphaNum: helpers.withMessage(
-//       '密碼需至少 8 碼以上，並英數混合',
-//       helpers.regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, /\d/)
-//     ),
-//   },
-// }));
-// const v$ = useVuelidate(rules, form.value);
-const isSending = ref(false);
-const errorMessage = ref('');
-function resetData() {
-  form.value.password = '';
-  isSending.value = false;
-}
-const Login = async () => {
-  signIn(form.value)
-    .then((res) => {
-      localStorage.setItem('metaWall', `Bearer ${res.data.token}`);
-      localStorage.setItem('isLogin', true);
-      router.push({ name: 'post' });
-    })
-    .catch(() => {
-      errorMessage.value = '登入失敗，帳號或密碼錯誤';
-      setTimeout(() => {
-        errorMessage.value = '';
-      }, 2000);
-    });
-};
-</script>
-
 <template>
   <ul class="w-full" @keyup.enter.exact="Login">  <!-- exact會限制只有單按「ctrl鍵」才能觸發事件 -->
     <li class="mb-8 w-full text-center text-2xl font-bold">
@@ -128,3 +69,62 @@ const Login = async () => {
     </li>
   </ul>
 </template>
+
+<script setup>
+// import useVuelidate from '@vuelidate/core';
+// import { required, email, helpers } from '@vuelidate/validators';
+import { ref, computed } from 'vue';
+import { signIn } from '../api'
+import { useRouter } from 'vue-router';
+import { API_URL } from '../global/constant';
+import ButtonIcon from '../components/ButtonIcon.vue';
+import IconGoogle from '@/components/icons/IconGoogle.vue';
+import IconLoading from '../components/icons/IconLoading.vue';
+// import IconFacebook from '@/components/icons/IconFacebook.vue';
+// import IconHex from '@/components/icons/IconHex.vue';
+// import IconDiscord from '@/components/icons/IconDiscord.vue';
+const router = useRouter();
+const loginUrls = {
+  google: `${API_URL}/users/google`,
+  facebook: `${API_URL}/users/facebook`,
+  discord: `${API_URL}/users/discord`,
+};
+const form = ref({
+  email: '',
+  password: '',
+});
+// const rules = computed(() => ({
+//   email: {
+//     required: helpers.withMessage('email 必填', required),
+//     email: helpers.withMessage('email 格式錯誤', email),
+//   },
+//   password: {
+//     required: helpers.withMessage('密碼必填', required),
+//     alphaNum: helpers.withMessage(
+//       '密碼需至少 8 碼以上，並英數混合',
+//       helpers.regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, /\d/)
+//     ),
+//   },
+// }));
+// const v$ = useVuelidate(rules, form.value);
+const isSending = ref(false);
+const errorMessage = ref('');
+function resetData() {
+  form.value.password = '';
+  isSending.value = false;
+}
+const Login = async () => {
+  signIn(form.value)
+    .then((res) => {
+      localStorage.setItem('metaWall', `Bearer ${res.data.token}`);
+      localStorage.setItem('isLogin', true);
+      router.push({ name: 'post' });
+    })
+    .catch(() => {
+      errorMessage.value = '登入失敗，帳號或密碼錯誤';
+      setTimeout(() => {
+        errorMessage.value = '';
+      }, 2000);
+    });
+};
+</script>

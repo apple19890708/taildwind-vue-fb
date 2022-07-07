@@ -6,6 +6,8 @@ import VueAxios from "vue-axios";
 import './index.css'
 import router from './router'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
+import Toast from 'vue-toastification';
+import 'vue-toastification/dist/index.css';
 
 // vue-easy-lightbox
 import VueEasyLightbox from 'vue-easy-lightbox/dist/external-css/vue-easy-lightbox.esm.min.js';
@@ -18,5 +20,6 @@ createApp(App)
 	.use(VueAxios, axios)
 	.use(VueEasyLightbox)
 	.use(pinia)
+	.use(Toast)
   .use(router)
 	.mount('#app')

@@ -1,13 +1,17 @@
 import { aepAxios } from './aepBaseApi';
 // import apiPost from './apiPost';
-import { signIn, getProfile, signOutUser } from './apiUser';
-import { getAllPost, postNewPost } from './apiPost';
+import { signUp, signIn, getProfile, signOutUser } from './apiUser';
+import { getAllPost, postNewPost, addLike, cancelLike, postComments } from './apiPost';
 
 export {
+	signUp,
 	signIn,
 	getProfile,
 	signOutUser,
 	getAllPost,
-	postNewPost
+	postNewPost,
+	addLike,
+	cancelLike,
+	postComments
 }
 

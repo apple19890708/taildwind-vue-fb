@@ -14,9 +14,10 @@ export const aepAxios = axios.create({
 })
 
 aepAxios.interceptors.response.use(undefined, (err) => { // 攔截到 response 發生錯誤時的 error 處理
+  localStorage.removeItem('metaWall');
+  localStorage.removeItem('isLogin');
   console.log('err', JSON.stringify(err.response.data))
-  if (err.response.data.error) {
-    window.location.href = '/sign-in'
-  }
+
+  // window.location.href = '/#/sign-in'
   throw err
 })
