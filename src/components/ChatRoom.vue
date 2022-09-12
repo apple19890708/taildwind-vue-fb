@@ -1,0 +1,292 @@
+<template>
+  <div
+    :class="[
+      'pointer-events-auto relative h-screen overflow-hidden rounded-tl-lg rounded-tr-lg border-black lg:bottom-0 lg:ml-4 lg:h-[455px] lg:w-[338px] lg:border-2',
+      { 'lg:h-14': !isOpen },
+    ]"
+  >
+    <div
+      class="flex h-14 items-center justify-between border-b-2 border-black bg-white px-2 py-2 lg:px-2"
+    >
+      <div class="flex items-center">
+        <Back @click="toPrevPage" class="mr-2 block h-8 w-8 lg:hidden" />
+        <!-- <AvatarVue size="40" :imgUrl="avatar.url" /> -->
+        <div class="flex flex-col justify-between pl-2">
+          <span class="font-bold">{{ name }}</span>
+          <span v-show="typingFlag" class="text-xs text-gray-500"
+            >對方正在輸入中...</span
+          >
+        </div>
+      </div>
+      <div class="hidden lg:flex">
+        <IconMinus
+          v-show="isOpen"
+          class="h-6 w-6 cursor-pointer hover:opacity-50"
+          @click="handleOpen"
+        />
+        <IconPlus
+          v-show="!isOpen"
+          class="h-6 w-6 cursor-pointer hover:opacity-50"
+          @click="handleOpen"
+        />
+        <Close
+          class="h-6 w-6 cursor-pointer hover:opacity-50"
+          @click="closeRoom"
+        />
+      </div>
+    </div>
+    <div
+      v-show="isOpen"
+      id="messageContainer"
+      ref="messageContainer"
+      class="relative h-[calc(100vh-56px-48px)] overflow-y-auto bg-white lg:h-[350px]"
+    >
+      <div class="text-center" v-if="!isLoading && messageList.length === 0">
+        開始聊天吧！
+      </div>
+      <div
+        class="flex items-center justify-center pt-2 text-slate-700"
+        v-if="isLoading"
+      >
+        載入中<IconLoading class="ml-1 h-4 w-4 animate-spin" />
+      </div>
+      <template v-for="message in messageList" :key="message._id">
+        <ChatRoomMessage :message="message" />
+      </template>
+    </div>
+    <div
+      v-if="newMsgFlag"
+      @click="scrollBottom"
+      class="absolute bottom-10 left-0 h-12 w-full bg-black bg-opacity-40 p-2 text-white"
+    >
+      您有新訊息
+    </div>
+    <ChatRoomInputBox
+      v-show="isOpen"
+      @userTyping="userTyping"
+      @sendMessage="sendMessage"
+    />
+  </div>
+</template>
+
+<style scoped>
+@supports (-webkit-touch-callout: none) {
+  .h-screen {
+    height: -webkit-fill-available;
+  }
+  .inner {
+    height: calc(-webkit-fill-available - 56px - 48px);
+  }
+}
+</style>
+
+<script setup>
+import { useToast } from 'vue-toastification';
+import {
+  nextTick,
+  reactive,
+  onMounted,
+  onBeforeUnmount,
+  toRefs,
+  ref,
+} from 'vue';
+import ChatRoomMessage from './ChatRoomMessage.vue';
+import ChatRoomInputBox from './ChatRoomInputBox.vue';
+import Close from '@/components/icons/IconCross.vue';
+import Back from '@/components/icons/IconBack.vue';
+import IconLoading from '@/components/icons/IconLoading.vue';
+import IconMinus from '@/components/icons/IconMinus.vue';
+import IconPlus from '@/components/icons/IconPlus.vue';
+import AvatarVue from './Avatar.vue';
+import eventBus from '@/utils/eventBus';
+import { API_URL, TEST_API_URL } from '@/global/constant';
+import { storeToRefs } from 'pinia';
+import { useRoomStore, useUserStore } from '@/stores';
+import { useRouter } from 'vue-router';
+import { io } from 'socket.io-client';
+
+const toast = useToast();
+const useStore = useUserStore();
+const roomStore = useRoomStore();
+const { room } = storeToRefs(roomStore);
+const { user } = storeToRefs(useStore);
+const router = useRouter();
+const isLoading = ref(false);
+const typingFlag = ref(false);
+const messageContainer = ref(null);
+const fetchAllFlag = ref(false);
+const newMsgFlag = ref(false);
+const flagHistory = ref(false);
+const scrollRecord = ref(0);
+const messageList = reactive([]);
+let timer = null;
+
+const props = defineProps({
+  roomInfo: {
+    type: Object,
+    required: true,
+    default: () => ({}),
+  },
+});
+
+console.log('props.roomInfo', props.roomInfo)
+const { roomId, name, isOpen } = toRefs(props.roomInfo);
+
+let token = localStorage.getItem('metaWall');
+if (!token) {
+  toast.error('請先登入喔！');
+  router.push('/');
+}
+token.startsWith('Bearer') && (token = token.split(' ')[1]);
+
+// socket初始化
+const socket = io(`${TEST_API_URL}/chat`, {
+  query: {
+    token,
+    room: roomId.value,
+  },
+  auth: {
+    token,
+  },
+});
+// 建立連線
+socket.on('connect', () => {
+  isLoading.value = true;
+  // getHistory(); // 這次可加可不加，因為後端已經在接通後傳資料回來了
+});
+
+// 加入房間訊息
+socket.on('joinRoomMessage', (user) => {
+  console.log('新人員加入聊天室', user);
+});
+
+// 接收到別人傳的訊息
+socket.on('chatMessage', (msg) => {
+  console.log('接收到別人傳的訊息', msg);
+  messageList.push(msg);
+  eventBus.emit('updateChatRecord', { roomId: roomId.value, msg });
+  if (
+    messageContainer.value.scrollHeight - messageContainer.value.scrollTop >
+    messageContainer.value.clientHeight
+  ) {
+    user.value._id !== msg.sender && (newMsgFlag.value = true);
+  } else {
+    scrollBottom();
+  }
+});
+
+// 接收後端連線成功後打給前端的歷史訊息
+socket.on('history', (msgList) => {
+  isLoading.value = false;
+  console.log('接收到歷史訊息', msgList);
+  const newArray = [...msgList, ...messageList];
+  Object.assign(messageList, newArray);
+  console.log('messageList', messageList);
+  msgList.length < 30 && (fetchAllFlag.value = true);
+  if (!flagHistory.value) {
+    scrollBottom();
+    flagHistory.value = true;
+  } else {
+    scrollToCorrect();
+  }
+  // 滾輪調整
+});
+
+const scrollToCorrect = async () => {
+  await nextTick();
+  messageContainer.value.scrollTop =
+    messageContainer.value.scrollHeight - scrollRecord.value;
+};
+
+socket.on('typing', (boolean) => {
+  typingFlag.value = boolean;
+});
+
+// 接收錯誤
+socket.on('error', (error) => {
+  toast.error(error);
+  router.go('/');
+});
+
+const getHistory = () => {
+  console.log('getHistory', fetchAllFlag.value);
+  if (fetchAllFlag.value) return;
+  const info = {
+    lastTime: messageList[0]?.createdAt,
+  };
+  isLoading.value = true;
+  console.warn('getHistory---', socket.connected);
+  socket.emit('history', info); // 向後端觸發 history
+};
+
+const endTyping = () => {
+  socket.emit('typing', false);
+};
+
+const userTyping = (key) => {
+  if (key === 'Enter') {
+    endTyping();
+    return;
+  }
+  socket.emit('typing', true);
+  clearTimeout(timer);
+  timer = setTimeout(() => {
+    endTyping();
+  }, 1500);
+};
+
+const sendMessage = (msg) => {
+  const sendMsg = {
+    message: msg,
+    sender: user.value._id,
+  };
+  socket.emit('chatMessage', sendMsg);
+};
+
+const scrollBottom = async () => {
+  await nextTick();
+  newMsgFlag.value = false;
+  messageContainer.value.scrollTop = messageContainer.value?.scrollHeight;
+};
+
+const closeRoom = () => {
+  const keepRoom = room.value.filter((room) => room.roomId !== roomId.value);
+  roomStore.updateRoom(keepRoom);
+};
+
+const handleOpen = () => {
+  const updatedRoom = room.value.find((room) => room.roomId === roomId.value);
+  updatedRoom.isOpen = !updatedRoom.isOpen;
+};
+
+const detectTop = () => {
+  messageContainer.value.addEventListener(
+    'scroll',
+    () => {
+      if (messageContainer.value.scrollTop === 0) {
+        scrollRecord.value = messageContainer.value.scrollHeight;
+        getHistory();
+      }
+    },
+    false
+  );
+};
+
+const toPrevPage = () => {
+  router.go(-1);
+  roomStore.updateRoom([]);
+};
+
+onMounted(() => {
+  console.warn('mounted');
+  detectTop();
+});
+
+onBeforeUnmount(() => {
+  console.warn('onBeforeUnmount');
+  socket.emit('leaveRoom', roomId.value);
+  socket.off();
+  socket.disconnect();
+  clearTimeout(timer);
+});
+</script>

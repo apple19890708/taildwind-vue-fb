@@ -12,7 +12,7 @@ defineProps({
 
 function getImageUrl(url) {
   if (url.startsWith('http')) return url;
-  return new URL(`../assets/${url}`, import.meta.url).href;
+  return new URL(url, import.meta.url).href;
 }
 </script>
 
@@ -23,7 +23,7 @@ function getImageUrl(url) {
   >
     <img
       class="w-full object-cover"
-      :src="getImageUrl(imgUrl)"
+      :src="imgUrl"
       alt="user's avatar"
     />
   </div>

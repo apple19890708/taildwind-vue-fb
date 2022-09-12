@@ -31,7 +31,7 @@
         </RouterLink>
       </li>
       <li>
-        <RouterLink to="#" class="flex items-center">
+        <RouterLink to="/chat-room-list" class="flex items-center">
           <IconButtonVue size="50">
             <IconChatVue class="h-6 w-6" />
           </IconButtonVue>

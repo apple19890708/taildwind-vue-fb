@@ -32,6 +32,16 @@ const router = createRouter({
           name: 'profile',
           component: () => import('../views/FrontPage/UserView.vue'),
         },
+        {
+          path: '/profile/settings',
+          name: 'profile-settings',
+          component: () => import('../views/FrontPage/UserSettingsView.vue'),
+        },
+        {
+          path: '/chat-room-list',
+          name: 'chat-room-list',
+          component: () => import('../views/FrontPage/ChatRoomListView.vue'),
+        },
       ]
     },
     {
@@ -54,6 +64,11 @@ const router = createRouter({
           component: () => import('../views/FrontPage/SignUpView.vue'),
         }
       ],
+    },
+    {
+      path: '/chat-room',
+      name: 'chat-room',
+      component: () => import('../views/FrontPage/ChatRoomView.vue'),
     },
   ]
 })

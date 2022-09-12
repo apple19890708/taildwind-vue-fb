@@ -1,0 +1,17 @@
+<template>
+  <div
+    class="pointer-events-none fixed bottom-0 right-10 hidden w-4/5 lg:flex lg:items-end lg:justify-end"
+  >
+    <template v-for="item in room" :key="item.roomId">
+      <ChatRoom :roomInfo="item" />
+    </template>
+  </div>
+</template>
+
+<script setup>
+import ChatRoom from './ChatRoom.vue';
+import { storeToRefs } from 'pinia';
+import { useRoomStore } from '@/stores';
+const roomStore = useRoomStore();
+const { room } = storeToRefs(roomStore);
+</script>

@@ -20,6 +20,7 @@
         </div>
       </div>
     </div>
+    <ChatContainer />
     <PostOption class="fixed left-1/2 bottom-12 -translate-x-1/2 md:hidden" />
   </div>
 </template>
@@ -27,6 +28,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 	import { RouterView } from 'vue-router';
+  import ChatContainer from '../components/ChatContainer.vue';
 	import Navbar from '../components/home/Navbar.vue';
 	import PostOption from '../components/home/PostOption.vue';
 	import SideMenu from '../components/home/SideMenu.vue';

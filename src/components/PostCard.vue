@@ -41,7 +41,7 @@
       @keyup.enter.exact="sendComment(innerPost._id)"
     >
       <Avatar class="mx-2" size="40" :imgUrl="userStore.user.avatar" />
-      <div class="flex w-full border-2 border-black">
+      <div class="flex w-full max-w-[89%] border-2 border-black">
         <input
           v-model="newComment"
           class="w-full border-none focus:ring-2 focus:ring-primary"
@@ -115,7 +115,7 @@ const isSendingComment = ref(false);
 const props = defineProps({
   post: {
     type: Object,
-    default: () => {},
+    default: () => ({}),
   },
 });
 const innerPost = ref(toRaw(props.post));

@@ -19,10 +19,10 @@ import AvatarVue from './Avatar.vue';
 
     <div class="mb-5 flex items-center">
       <AvatarVue class="mx-2" size="40" />
-      <div class="flex w-full">
-        <input class="w-full border-2 border-black" type="text" />
+      <div class="flex w-full max-w-[89%] border-2 border-black">
+        <input class="w-full border-none focus:ring-2 focus:ring-primary" type="text" />
         <button
-          class="inline-block w-full max-w-[128px] border-2 border-black bg-primary text-base text-white"
+          class="flex w-full max-w-[128px] items-center justify-center border-l-2 border-black bg-primary text-base text-white"
         >
           留言
         </button>

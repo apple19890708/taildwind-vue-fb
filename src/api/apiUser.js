@@ -21,6 +21,18 @@ export const getProfile = () => aepAxios({
   url: `${API_URL}/users/profile`,
 }).then(( data ) => data);
 
+export const getOtherUsersProfile = (id) => aepAxios({
+  method: 'get',
+  url: `${API_URL}/users/${id}/getOtherProfile`,
+}).then(( data ) => data);
+
+
+export const updateProfile = (data) => aepAxios({
+  method: 'patch',
+  data,
+  url: `${API_URL}/users/profile`,
+}).then(({ data: resData }) => resData);
+
 export const signOutUser = () => aepAxios({
   method: 'post',
   url: `${API_URL}/users/sign_out`,
