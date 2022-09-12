@@ -2,7 +2,7 @@ import axios from 'axios';
 import { API_URL, TEST_API_URL } from '../global/constant';
 
 const chatRequest = axios.create({
-  baseURL: `${TEST_API_URL}/chat`,
+  baseURL: `${API_URL}/chat`,
   timeout: 20000,
 });
 

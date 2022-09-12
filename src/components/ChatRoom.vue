@@ -140,7 +140,7 @@ if (!token) {
 token.startsWith('Bearer') && (token = token.split(' ')[1]);
 
 // socket初始化
-const socket = io(`${TEST_API_URL}/chat`, {
+const socket = io(`${API_URL}/chat`, {
   query: {
     token,
     room: roomId.value,
