@@ -4,7 +4,7 @@ import { useUserStore } from '@/stores';
 const userStore = useUserStore();
 const router = useRouter();
 const route = useRoute();
-
+console.log('route.query', route.query)
 if (
   route.query.token &&
   route.query.id &&
