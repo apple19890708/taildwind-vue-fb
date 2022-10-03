@@ -41,7 +41,7 @@
 	import PostOption from '../components/home/PostOption.vue';
 	import SideMenu from '../components/home/SideMenu.vue';
   import { aepAxios } from "../api/aepBaseApi";
-  import { getProfile } from '../api'
+  // import { getProfile } from '../api'
   import { useUserStore } from '@/stores';
   import { useRouter } from 'vue-router';
   const userStore = useUserStore();
