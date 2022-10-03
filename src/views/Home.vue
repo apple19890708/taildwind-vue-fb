@@ -49,20 +49,20 @@
   const router = useRouter();
 
 aepAxios.defaults.headers.common.Authorization = localStorage.getItem('metaWall');
-  getProfile()
-    .then((res) => {
-      const userInfo = {
-        name: res.data.user.name,
-        avatar: res.data.user.photo,
-        role: res.data.user.role,
-        id: res.data.user._id,
-      }
-      userStore.updateUser(userInfo);
-      isLoading.value = false;
-    })
-    .catch(() => {
-      router.push({ name: 'sign-in' });
-    });
+  // getProfile()
+  //   .then((res) => {
+  //     const userInfo = {
+  //       name: res.data.user.name,
+  //       avatar: res.data.user.photo,
+  //       role: res.data.user.role,
+  //       id: res.data.user._id,
+  //     }
+  //     userStore.updateUser(userInfo);
+  //     isLoading.value = false;
+  //   })
+  //   .catch(() => {
+  //     router.push({ name: 'sign-in' });
+  //   });
 onMounted(() => {
   if (userStore.name) {
     isLoading.value = false;
