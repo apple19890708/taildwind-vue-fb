@@ -12,9 +12,9 @@ const useChat = () => {
     const roomArr = room.value.map((item) => item.roomId);
     return roomArr.includes(roomId);
   };
-  const handleRoom = (data) => {
+  const handleRoom = (data, isGroup = false) => {
     const { roomId, name } = data;
-    const roomObj = { roomId, name, isOpen: true };
+    const roomObj = { roomId, name, isOpen: true, isGroup };
     const device = deviceType();
     console.log('device', device);
     console.log('isRoomExist', isRoomExist(roomId))

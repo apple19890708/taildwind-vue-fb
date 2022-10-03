@@ -34,16 +34,10 @@ import { apiChat } from '@/utils/apiChat';
 const toast = useToast();
 const chatList = reactive([]);
 // 需要一個建立群聊的API
-const chatGroupList = reactive([
-    {
-      avatar: 'https://i.picsum.photos/id/247/200/300.jpg?hmac=DOAWkFIrJUIvEj0t5qAsGiVgyTn8_e8EicBaXPCQge8',
-      message: [],
-      name: 'Group1',
-      roomId: "62f236e2fcc531ef53010726"
-    }
-  ]); // 搜尋房間為公開狀態的群聊室，並回傳相關列表
+const chatGroupList = reactive([]); // 搜尋房間為公開狀態的群聊室，並回傳相關列表
 const isLoading = ref(true);
 const updateChatRecord = ({ roomId, msg }) => {
+  console.log('msg', msg)
   const targetIndex = chatList.findIndex((item) => item.roomId === roomId);
   targetIndex > -1 && (chatList[targetIndex].message = [msg]);
 };
@@ -68,11 +62,40 @@ const queryRoomList = async () => {
   }
 };
 
+const updateOpenChatRecord = ({ roomId, msg }) => {
+  console.log('msg', msg)
+  const targetIndex = chatGroupList.findIndex((item) => item.roomId === roomId);
+  targetIndex > -1 && (chatGroupList[targetIndex].message = [msg]);
+};
+
+eventBus.on('updateOpenChatRecord', updateOpenChatRecord); // 即時更新聊天室最後一條訊息
+
+const queryOpenRoomList = async () => {
+  try {
+    isLoading.value = true;
+    const res = await apiChat.openRecord();
+    const {
+      data: { status, chatRecord },
+    } = res;
+    if (status) {
+      Object.assign(chatGroupList, chatRecord);
+      console.log('chatGroupList', chatGroupList);
+    }
+  } catch (error) {
+    const msg = error.response.data?.message;
+    msg && toast.error(msg);
+  } finally {
+    isLoading.value = false;
+  }
+};
+
 onMounted(() => {
   queryRoomList();
+  queryOpenRoomList();
 });
 
 onBeforeUnmount(() => {
   eventBus.off('updateChatRecord', updateChatRecord);
+  eventBus.off('updateOpenChatRecord', updateOpenChatRecord);
 });
 </script>

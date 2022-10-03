@@ -37,5 +37,6 @@ export const token = () => {
 
 export const apiChat = {
   record: () => chatRequest.get('/chat-record', token()),
+  openRecord: () => chatRequest.get('/open-chat-record', token()),
   room: (data) => chatRequest.post('/room-info', data, token()),
 };

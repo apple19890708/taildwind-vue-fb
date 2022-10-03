@@ -3,6 +3,10 @@
     <li class="mb-8 w-full text-center text-2xl font-bold">
       到元宇宙展開全新社交圈
     </li>
+    <!-- <li>
+      <Input v-model="testVal"/>
+      {{ testVal }}
+    </li> -->
     <li class="mb-4 w-full">
       <input
         class="w-full border-2 border-black py-4 px-6 font-azeret"
@@ -77,6 +81,7 @@ import { ref, computed } from 'vue';
 import { signIn } from '../api'
 import { useRouter } from 'vue-router';
 import { API_URL } from '../global/constant';
+import Input from '../components/Input.vue';
 import ButtonIcon from '../components/ButtonIcon.vue';
 import IconGoogle from '@/components/icons/IconGoogle.vue';
 import IconLoading from '../components/icons/IconLoading.vue';
@@ -89,6 +94,7 @@ const loginUrls = {
   facebook: `${API_URL}/users/facebook`,
   discord: `${API_URL}/users/discord`,
 };
+const testVal = ref('123');
 const form = ref({
   email: '',
   password: '',

@@ -7,5 +7,5 @@ const { room } = storeToRefs(roomStore);
 </script>
 
 <template>
-  <chat-room :roomInfo="room?.[0]" />
+  <ChatRoom :roomInfo="room?.[0]" />
 </template>

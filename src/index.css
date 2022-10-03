@@ -2,7 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 建立統一背景 */
+/* 設立變數 */
+:root {
+  --bruce-primary: rgb(255, 8, 8);
+  --bruce-title: 24px;
+}
+
+/* 建立統一背景 擴展基本樣式 */
 @layer base { 
   body {
     @apply font-sans;
@@ -17,3 +23,9 @@
     object-fit: cover;
   }
 }
+
+/* @layer components { 組件寫法，如果可以還是建議獨立為一個cpmponent組件，而非寫在這裡
+  .card {
+    @apply w-full px-4 py-3 
+  }
+} */

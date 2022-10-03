@@ -1,5 +1,5 @@
 module.exports = {
-  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'], // 在 Tailwind CSS V3 purge中已更改為content. 只把有用到的打包
   theme: {
     fontFamily: {
       sans: ['Noto Sans TC', 'sans-serif'],
@@ -8,9 +8,13 @@ module.exports = {
       baloo: ['Baloo Da 2', 'cursive'],
     },
     extend: {
+      screens: { // 自訂 RWD 尺寸
+        'xx': '1000px'
+      },
       colors: {
         primary: {
           DEFAULT: '#03438D',
+          test: '#e5fcff'
         },
         secondary: '#EFECE7',
         warning: '#EEC32A',
@@ -30,6 +34,11 @@ module.exports = {
         login: '-8px 8px 0px #00040029',
       },
     },
+  },
+  variants: {
+    // extend: {
+    //   ringWidth: ['active']
+    // },
   },
   plugins: [require('@tailwindcss/forms')],
 };

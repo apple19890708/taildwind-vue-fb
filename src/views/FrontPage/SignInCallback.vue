@@ -19,7 +19,11 @@ if (
     avatar: route.query.avatar
   };
   userStore.updateUser(userInfo);
-  router.push({ name: 'post' });
+  if (route.query.mode && route.query.mode === 'forgetPassword') {
+    router.push({ name: 'profile-settings' });
+  } else {
+    router.push({ name: 'posts' });
+  }
 } else {
   router.push({ name: 'sign-in' });
 }

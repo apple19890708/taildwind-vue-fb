@@ -6,11 +6,18 @@
       :avatar="userStore.user.avatar"
       :userPageUrl="'/profile/' + userStore.user.id"
     />
+    <!-- tailwind 各樣是引入與 JIT範例測試 -->
+    
+    <!-- <button class="text-[30px] ml-2 ring-gray-500 active:ring-2">123</button> -->
+    <!-- <div class="text-[length:var(--bruce-title)] text-[color:var(--bruce-primary)]">123</div> -->
+
+    <!-- tailwind 各樣是引入與 JIT範例測試 -->
     <div class="container mx-auto w-11/12 px-3 sm:px-0 md:w-9/12 xl:w-7/12">
       <div class="grid gap-6 md:grid-cols-3">
         <div class="md:col-span-2">
           <RouterView></RouterView>
         </div>
+        <!-- desktop SideMenu-->
         <div class="hidden md:block">
           <SideMenu
             :name="userStore.user.name"
@@ -21,12 +28,13 @@
       </div>
     </div>
     <ChatContainer />
+    <!-- mobile option-->
     <PostOption class="fixed left-1/2 bottom-12 -translate-x-1/2 md:hidden" />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+  import { ref, computed, onMounted } from 'vue';
 	import { RouterView } from 'vue-router';
   import ChatContainer from '../components/ChatContainer.vue';
 	import Navbar from '../components/home/Navbar.vue';

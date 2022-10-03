@@ -5,9 +5,11 @@
     class="shadow-normal mb-4 flex h-[77px] cursor-pointer items-center justify-between rounded-lg border-2 border-black bg-white px-4"
   >
     <div class="flex items-center">
-      <Avatar size="40" :imgUrl="avatar" />
+      <Avatar v-if="!props.isGroup" size="40" :imgUrl="avatar" />
+      <Avatar v-else size="40" :imgUrl="props.room.message[0].sender.photo" />
       <div class="flex-1 pl-3">
-        <p class="font-bold">{{ name }}</p>
+        <p v-if="!props.isGroup" class="font-bold">{{ name }}</p>
+        <p v-else class="font-bold">{{ props.room.message[0].sender.name }}</p>
         <p
           class="w-[200px] overflow-hidden overflow-ellipsis whitespace-nowrap text-sm text-slate-500 md:w-80"
         >
@@ -44,7 +46,7 @@ const formateTime = (time) => {
 const goChatRoom = () => {
   if(props.isGroup) {
     console.log('isGroup') // 以一個API判斷使用者是否加入聊天群內
-    handleRoom(props.room);
+    handleRoom(props.room, props.isGroup);
   } else {
     console.log('single')
     handleRoom(props.room);

@@ -7,6 +7,12 @@ import Home from '../views/Home.vue';
 const router = createRouter({
   history: routerHistory,
   routes: [
+    //測試 tailwind 用頁面
+    {
+      path:'/test-tailwind',
+      name: 'test-tailwind',
+      component: () => import('../views/ForTailwindTest.vue')
+    },
     {
       path: '/',
       component: Home,
@@ -62,6 +68,11 @@ const router = createRouter({
           path: '/sign-up',
           name: 'sign-up',
           component: () => import('../views/FrontPage/SignUpView.vue'),
+        },
+        {
+          path: '/forget-password',
+          name: 'forget-password',
+          component: () => import('../views/FrontPage/ForgetPasswordView.vue'),
         }
       ],
     },

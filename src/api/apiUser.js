@@ -26,6 +26,11 @@ export const getOtherUsersProfile = (id) => aepAxios({
   url: `${API_URL}/users/${id}/getOtherProfile`,
 }).then(( data ) => data);
 
+export const sendForgetMail = (data) => aepAxios({
+  method: 'post',
+  data,
+  url: `${API_URL}/users/forget-password`,
+}).then(({ data: resData }) => resData);
 
 export const updateProfile = (data) => aepAxios({
   method: 'patch',

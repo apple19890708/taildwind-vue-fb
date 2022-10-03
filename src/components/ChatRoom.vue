@@ -164,7 +164,11 @@ socket.on('joinRoomMessage', (user) => {
 socket.on('chatMessage', (msg) => {
   console.log('接收到別人傳的訊息', msg);
   messageList.push(msg);
-  eventBus.emit('updateChatRecord', { roomId: roomId.value, msg });
+  if (props.roomInfo.isGroup) {
+    eventBus.emit('updateOpenChatRecord', { roomId: roomId.value, msg });
+  } else {
+    eventBus.emit('updateChatRecord', { roomId: roomId.value, msg });
+  }
   if (
     messageContainer.value.scrollHeight - messageContainer.value.scrollTop >
     messageContainer.value.clientHeight

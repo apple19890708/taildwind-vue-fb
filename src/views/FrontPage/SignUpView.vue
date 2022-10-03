@@ -125,13 +125,16 @@ const signUpMember = async () => {
   if (!valid) return;
   isSending.value = true;
   try {
-    const res = signUp(form.value)
-    if(res.status === 'scuess') {
+    const res = await signUp(form.value);
+    console.log('res', res)
+    if(res.status) {
       resetData();
-      alert(res.data.message);
+      alert(res.message);
       router.push({ name: 'sign-in' });
+      isSending.value = false;
     }
   } catch (error) {
+    isSending.value = false;
     errorMessage.value = error.message;
     resetData();
     setTimeout(() => {

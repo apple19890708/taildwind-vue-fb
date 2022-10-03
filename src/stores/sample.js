@@ -14,3 +14,19 @@
 //     },
 //   },
 // });
+
+// componsition 寫法
+export const useCounterStore = defineStore('counter', () => {
+	const counter = ref(0);
+	const doubleCount = computed(() => {
+		return counter.value * 2;
+	});
+	const increment = () => {
+		counter.value++
+	};
+	return {
+		counter,
+		doubleCount,
+		increment
+	}
+})
