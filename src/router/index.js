@@ -20,7 +20,7 @@ const router = createRouter({
         {
           path: '/',
           name: 'post',
-          // meta: { requiresAuth: true },
+          meta: { requiresAuth: true },
           component: () => import('../views/PostView.vue'),
         },
         {
