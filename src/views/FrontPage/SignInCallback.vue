@@ -25,7 +25,7 @@ if (
     router.push({ name: 'posts' });
   }
 } else {
-  router.push({ name: 'sign-in' });
+  // router.push({ name: 'sign-in' });
 }
 </script>
 <template>
