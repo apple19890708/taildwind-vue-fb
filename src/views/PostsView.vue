@@ -1,11 +1,12 @@
 <template>
-	<ul v-show="isLoading">
+  <ul v-show="isLoading">
     <li v-for="index in 3" :key="index" class="mb-4">
       <PostLoadingCard />
     </li>
   </ul>
-	<div v-show="!isLoading">
-		<ul v-if="postsData.length > 0">
+
+  <div v-show="!isLoading">
+    <ul v-if="postsData.length > 0">
       <li
         v-for="(item, index) in postsData"
         :key="item.id"
@@ -14,24 +15,27 @@
         <PostCard :post="item" />
       </li>
     </ul>
-	</div>
+
+    <PostEmptyCard v-else>
+      <p class="p-8 text-center text-subtitle">
+        目前尚無動態，新增一則貼文吧！
+      </p>
+    </PostEmptyCard>
+  </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from "vue";
-import { useRoute } from 'vue-router';
-import { getOnePost } from '@/api'
-import PostLoadingCard from '@/components/PostLoadingCard.vue';
+import { ref, onMounted } from 'vue';
 import PostCard from '@/components/PostCard.vue';
-
-const route = useRoute();
+import PostEmptyCard from '@/components/PostEmptyCard.vue';
+import { getAllPost } from '@/api'
+import PostLoadingCard from '@/components/PostLoadingCard.vue';
 const isLoading = ref(true);
+const posts = ref([]);
 const postsData = ref([]);
-const id = ref(route.params.id);
-
-const getUserOnePost = async (id) => {
+const getAllPosts = async () => {
 	try {
-		const res = await getOnePost(id);
+		const res = await getAllPost();
 		if (res.status) {
 			postsData.value = res.data.data;
 			isLoading.value = false;
@@ -40,10 +44,7 @@ const getUserOnePost = async (id) => {
 		console.log('error', error)
 	}
 }
-
 onMounted(() => {
-	console.log('id', id.value)
-  getUserOnePost(id.value);
+  getAllPosts();
 });
-
 </script>

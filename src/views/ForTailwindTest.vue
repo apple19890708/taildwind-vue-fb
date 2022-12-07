@@ -8,7 +8,7 @@
 					<span class="font-bold text-black">free plan.</span>
 				</p>
 			</div>
-			<button class="text-primary-test bg-primary py-2 px-4 rounded-sm tracking-wide ring-primary ring-offset-2 active:ring-4 duration-100">Login</button>
+			<button @click="openLogin" class="text-primary-test bg-primary py-2 px-4 rounded-sm tracking-wide ring-primary ring-offset-2 active:ring-4 duration-100">Login</button>
 		</div>
 		<div class="mt-8 lg:grid lg:grid-cols-4 lg:justify-evenly lg:gap-8 lg:max-w-[1280px] lg:mx-auto">
 			<!-- card  -->
@@ -34,12 +34,29 @@
 			</div>
 		</div>
 	</div>
+	<!-- Dialog -->
+	<div ref="modal" class="absolute top-0 left-0 right-0 w-full h-full bg-black/60 flex justify-center items-start opacity-0 pointer-events-none duration-300">
+		<div class="w-[90%] p-4 bg-white mt-20 rounded-lg">
+			<div class="flex justify-center">標題</div>
+			<div class="flex justify-center">內容</div>
+			<label>User Name</label>
+			<Input
+				v-model="name"
+				class="w-full border-none focus:ring-2 focus:ring-primary"
+				type="text"
+			/>
+			<button @click="closeLogin" class="w-full bg-primary py-3 text-lg text-white tracking-wide rounded-lg">OK</button>
+		</div>
+	</div>
 </template>
 
 <script setup>
 import { ref, reactive } from 'vue';
 import IconArrowRightVue from '@/components/icons/IconArrowRight.vue';
+import Input from '@/components/Input.vue';
 const clickIdx = ref(null);
+const name = ref('');
+const modal = ref(null);
 const cardList = reactive([
 	{text: '111'},
 	{text: '222'},
@@ -53,5 +70,12 @@ const cardConetntList = reactive([
 	{text: '333'},
 	{text: '444'},
 ]);
+
+const openLogin = () => {
+	modal.value.classList.remove('opacity-0', 'pointer-events-none')
+}
+const closeLogin = () => {
+	modal.value.classList.add('opacity-0', 'pointer-events-none')
+}
 
 </script>

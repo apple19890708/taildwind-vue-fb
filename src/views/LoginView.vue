@@ -1,36 +1,4 @@
-<script setup>
-import { onMounted, ref } from 'vue';
-import { RouterView, useRouter } from 'vue-router';
-// import { apiUser, token } from '../utils/apiUser';
-// import { useUserStore } from '@/stores';
-// import PageLoading from '../components/PageLoading.vue';
-// const userStore = useUserStore();
-const router = useRouter();
-
-// const isLoading = ref(true);
-
-// onMounted(() => {
-//   if (userStore.name) {
-//     return router.replace({ name: 'posts' });
-//   }
-//   if (!token()) {
-//     isLoading.value = false;
-//     return;
-//   }
-//   apiUser
-//     .check()
-//     .then((res) => {
-//       userStore.updateUser(res.data.data);
-//       router.replace({ name: 'posts' });
-//     })
-//     .catch(() => {
-//       isLoading.value = false;
-//       return;
-//     });
-// });
-</script>
 <template>
-  <!-- <PageLoading v-if="isLoading"></PageLoading> -->
   <div
     class="box-border flex h-screen w-full items-center justify-center"
   >
@@ -49,3 +17,8 @@ const router = useRouter();
     </div>
   </div>
 </template>
+
+<script setup>
+import { onMounted, ref } from 'vue';
+import { RouterView } from 'vue-router';
+</script>

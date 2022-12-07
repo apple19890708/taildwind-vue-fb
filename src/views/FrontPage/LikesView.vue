@@ -1,68 +1,51 @@
 <template>
   <CardTitle title="我按讚的貼文" />
-  <ul>
-    <li
-      v-for="(item, index) in likes"
-      :key="item._id"
-      class="rounded-lg border-2 border-black bg-white py-5 pl-4 pr-10 shadow-post"
-      :class="{ 'mb-2': index < likes.length - 1 }"
-    >
-      <div class="flex justify-between">
-        <UserInfo :name="item.user?.name" :subTitle="item.createAt" />
-        <ul class="flex gap-10">
-          <li>
-            <button
-              type="button"
-              class="flex flex-col items-center justify-center gap-1"
-            >
-              <IconThumbsUpVue class="h-5 w-5 text-primary" />
-              <span>取消</span>
-            </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              class="flex flex-col items-center justify-center gap-1"
-            >
-              <IconArrowRightVue class="h-5 w-5" />
-              <span>查看</span>
-            </button>
-          </li>
-        </ul>
-      </div>
-    </li>
-  </ul>
+  <div v-show="!isLoading">
+    <ul v-if="likePosts.length > 0">
+      <li
+        v-for="(item, index) in likePosts"
+        :key="item._id"
+        :class="{ 'mb-2': index < likePosts.length - 1 }"
+      >
+        <LikeCard :item="item" @get-likes="getLikeLists" />
+      </li>
+    </ul>
+    <PostEmptyCard v-else>
+      <p class="p-8 text-center text-subtitle">
+        目前尚無按讚文章，按讚一則貼文吧！
+      </p>
+    </PostEmptyCard>
+  </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import CardTitle from '@/components/CardTitle.vue';
-import UserInfo from '@/components/UserInfo.vue';
-import IconThumbsUpVue from '@/components/icons/IconThumbsUp.vue';
-import IconArrowRightVue from '@/components/icons/IconArrowRight.vue';
+import LikeCard from '@/components/LikeCard.vue';
+import LikeLoadingCard from '@/components/LikeLoadingCard.vue';
+import PostEmptyCard from '@/components/PostEmptyCard.vue';
+import { getLikeList } from '@/api';
+import { useToast } from 'vue-toastification';
+const toast = useToast();
+const isLoading = ref(false);
+const likePosts = ref([]);
+const getLikeLists = async () => {
+  isLoading.value = true;
+  try {
+    const res = await getLikeList();
+    console.log('res.likeList', res)
+    if (res.data.status === 'success') {
+      likePosts.value = res.data.likeList;
+    }
+    isLoading.value = false;
+  } catch (error) {
+    toast.error('讀取按讚列表失敗');
+    console.log(err);
+    isLoading.value = false;
+  }
+}
 
-const data = [
-  {
-    _id: 'asdflkjhasdflkjh',
-    user: {
-      name: '愛爾敏',
-    },
-    createAt: '發文時間：2022/2/22 12:00',
-  },
-  {
-    _id: 'askdhjfksdhfk',
-    user: {
-      name: '米卡莎',
-    },
-    createAt: '發文時間：2022/2/21 20:00',
-  },
-];
-
-const likes = ref();
-const getLikes = () => {
-  likes.value = data;
-};
 onMounted(() => {
-  getLikes();
+  getLikeLists();
 });
 </script>

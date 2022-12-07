@@ -75,7 +75,14 @@
             placeholder="請輸入暱稱"
             class="w-full border-2 border-black"
             maxlength="10"
+            @blur="vProfile$.name.$touch"
           />
+        </div>
+        <div
+          v-if="vProfile$.name.$errors.length > 0"
+          class="font-azeret text-alert"
+        >
+          {{ vProfile$.name.$errors[0].$message }}
         </div>
         <button
           type="submit"
@@ -105,23 +112,42 @@
             class="w-full border-2 border-black"
             maxlength="20"
             required
+            @blur="vPassword$.password.$touch"
           />
+        </div>
+        <div
+          v-if="vPassword$.password.$errors.length > 0"
+          class="font-azeret text-alert"
+        >
+          {{ vPassword$.password.$errors[0].$message }}
         </div>
         <div class="mb-1">
           <label for="checkPassword" class="mb-1 block">再次輸入</label>
           <input
-            v-model="changePassword.passwordConfirm"
+            v-model="changePassword.confirmPassword"
             type="password"
             id="checkPassword"
             placeholder="再次輸入新密碼"
             class="w-full border-2 border-black"
             maxlength="20"
+            @blur="vPassword$.confirmPassword.$touch"
             required
           />
         </div>
+        <div
+          v-if="vPassword$.confirmPassword.$errors.length > 0"
+          class="font-azeret text-alert"
+        >
+          {{ vPassword$.confirmPassword.$errors[0].$message }}
+        </div>
         <button
           type="submit"
-          class="mt-8 flex w-full items-center justify-center rounded border-2 border-black bg-subtitle py-4 text-black disabled:opacity-50"
+          class="mt-8 flex w-full items-center justify-center rounded border-2 border-black bg-warning py-4 text-black disabled:opacity-50"
+          :disabled="
+            vPassword$.password.$errors.length > 0 ||
+            vPassword$.confirmPassword.$errors.length > 0 ||
+            changePassword.password === undefined
+          "
         >
           <span v-show="!isSending">{{ updateMessage.password }}</span>
           <IconLoading
@@ -133,6 +159,7 @@
           ref="resetvPassword"
           type="button"
           class="hidden"
+          @click="vPassword$.$reset()"
         >
           reset
         </button>
@@ -155,7 +182,7 @@ import {
   sameAs,
 } from '@vuelidate/validators';
 import { useUserStore } from '@/stores';
-import { updateProfile } from '@/api'
+import { updateProfile, updatePassword } from '@/api'
 import { useToast } from 'vue-toastification';
 const toast = useToast();
 const userStore = useUserStore();
@@ -164,6 +191,58 @@ const updateMessage = reactive({
   profile: '送出更新',
   password: '重設密碼',
 });
+const changePassword = reactive({});
+const resetvPassword = ref(null);
+const updateUserPwd = async ($event) => {
+  isSending.value = true;
+  try {
+    const res = await updatePassword(changePassword);
+    if(res.status) {
+      isSending.value = false;
+      updateMessage.password = '更新完成';
+      changePassword.password = '';
+      changePassword.confirmPassword = '';
+      resetStatusMessage();
+    }
+  } catch (error) {
+    isSending.value = false;
+    updateMessage.password = '更新失敗';
+    resetStatusMessage();
+  }
+  $event.target.reset();
+  resetvPassword.value.click();
+};
+const resetStatusMessage = () => {
+  setTimeout(() => {
+    updateMessage.profile = '送出更新';
+    updateMessage.password = '重設密碼';
+  }, 3000);
+};
+const nameRules = computed(() => ({
+  name: {
+    required: helpers.withMessage('暱稱必填', required),
+    minLength: helpers.withMessage('暱稱至少 2 個字元以上', minLength(2)),
+    maxLength: helpers.withMessage('暱稱不能高於 10 個字元', maxLength(10)),
+  },
+}));
+
+const passwordRules = computed(() => ({
+  password: {
+    required: helpers.withMessage('密碼必填', required),
+    alphaNum: helpers.withMessage(
+      '密碼需至少 8 碼以上，並英數混合',
+      helpers.regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, /\d/)
+    ),
+  },
+  confirmPassword: {
+    required: helpers.withMessage('密碼必填', required),
+    sameAsPassword: helpers.withMessage(
+      '密碼不一致',
+      sameAs(changePassword.password)
+    ),
+  },
+}));
+
 
 // Change tab
 const tabName = ref('editNickName');
@@ -176,7 +255,8 @@ const changeUserProfile = ref({ ...userStore.user });
 watch(userStore, (newValue) => {
   changeUserProfile.value = { ...newValue.user };
 });
-// const vProfile$ = useVuelidate(nameRules, changeUserProfile);
+const vProfile$ = useVuelidate(nameRules, changeUserProfile);
+const vPassword$ = useVuelidate(passwordRules, changePassword);
 const imageFile = ref(null);
 const avatarForm = ref(null);
 const avatarPreviewInfo = reactive({
@@ -235,6 +315,6 @@ const updateUserProfile = async() => {
 
 
 // Password
-const changePassword = reactive({});
+
 
 </script>

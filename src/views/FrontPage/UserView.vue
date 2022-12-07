@@ -72,7 +72,7 @@ import { useUserStore } from '@/stores';
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { apiChat } from '@/utils/apiChat';
-import { getAllPost, getOtherUsersProfile } from '@/api';
+import { getAllPost, getOtherUsersProfile, postFollow, cancelFollow } from '@/api';
 import { useToast } from 'vue-toastification';
 import useChat from '@/use/useChat';
 const toast = useToast();
@@ -129,7 +129,7 @@ const getAllPosts = async () => {
 
 // 篩選個人貼文 (註：後端出 個人貼文API 後移除)
 const userPosts = computed(() => {
-  return posts.value.filter((item) => item.userId?._id === id.value);
+  return posts.value.filter((item) => item.user?._id === id.value);
 });
 onMounted(() => {
   getPosts();
@@ -162,27 +162,27 @@ onMounted(() => {
 });
 
 // 追蹤 & 取消追蹤
-const followUser = () => {
+const followUser = async () => {
   if (!isFollow.value) {
     // 追蹤
-    apiUser
-      .follow(userProfile.value.id)
-      .then(() => {
+    try {
+      const res = await postFollow(userProfile.value._id);
+      if(res) {
         getUserProfile();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      }
+    } catch (error) {
+      console.log('error', error)
+    }
   } else {
     // 取消追蹤
-    apiUser
-      .deleteFollow(userProfile.value.id)
-      .then(() => {
+    try {
+      const res = await cancelFollow(userProfile.value._id);
+      if(res) {
         getUserProfile();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      }
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 };
 

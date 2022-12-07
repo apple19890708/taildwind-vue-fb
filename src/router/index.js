@@ -19,14 +19,25 @@ const router = createRouter({
       children: [
         {
           path: '/',
-          name: 'post',
+          name: 'posts',
           meta: { requiresAuth: true },
+          component: () => import('../views/PostsView.vue'),
+        },
+        // 取得單一貼文資訊
+        {
+          path: '/post/:id',
+          name: 'post',
           component: () => import('../views/PostView.vue'),
         },
         {
           path: '/post-news',
           name: 'post-news',
           component: () => import('../views/PostNew.vue'),
+        },
+        {
+          path: '/follow',
+          name: 'follow',
+          component: () => import('../views/FrontPage/FollowListView.vue'),
         },
         {
           path: '/likes',

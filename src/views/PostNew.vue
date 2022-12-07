@@ -103,7 +103,7 @@ const submitPost = async () => {
     form.append('photos', image);
   });
     const res = await postNewPost(form);
-    router.push({ name : 'post'});
+    router.push({ name : 'posts'});
   } catch (error) {
     console.log('error', error)
   }

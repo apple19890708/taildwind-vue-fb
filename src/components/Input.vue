@@ -3,7 +3,7 @@
 		<input
 			v-model="modelValue"
 			@input="changeText"
-			class="w-full border-none focus:ring-2 focus:ring-primary"
+			class="w-full border-2 border-black py-4 px-6 font-azeret"
 			type="text"
 		/>
 	</div>

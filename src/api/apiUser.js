@@ -38,8 +38,35 @@ export const updateProfile = (data) => aepAxios({
   url: `${API_URL}/users/profile`,
 }).then(({ data: resData }) => resData);
 
+export const updatePassword = (data) => aepAxios({
+  method: 'post',
+  data,
+  url: `${API_URL}/users/updatePassword`,
+}).then(({ data: resData }) => resData);
+
 export const signOutUser = () => aepAxios({
   method: 'post',
   url: `${API_URL}/users/sign_out`,
 }).then(( data ) => data);
+
+export const getLikeList = () => aepAxios({
+  method: 'get',
+  url: `${API_URL}/users/getLikeList`,
+}).then(( data ) => data);
+
+export const postFollow = (id) => aepAxios({
+  method: 'post',
+  url: `${API_URL}/users/${id}/follow`,
+}).then(( data ) => data);
+
+export const cancelFollow = (id) => aepAxios({
+  method: 'delete',
+  url: `${API_URL}/users/${id}/unfollow`,
+}).then(( data ) => data);
+
+export const getFollowing = (id) => aepAxios({
+  method: 'get',
+  url: `${API_URL}/users/following`,
+}).then(( data ) => data);
+
 

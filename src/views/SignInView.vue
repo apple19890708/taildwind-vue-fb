@@ -3,10 +3,6 @@
     <li class="mb-8 w-full text-center text-2xl font-bold">
       到元宇宙展開全新社交圈
     </li>
-    <!-- <li>
-      <Input v-model="testVal"/>
-      {{ testVal }}
-    </li> -->
     <li class="mb-4 w-full">
       <input
         class="w-full border-2 border-black py-4 px-6 font-azeret"
@@ -94,7 +90,6 @@ const loginUrls = {
   facebook: `${API_URL}/users/facebook`,
   discord: `${API_URL}/users/discord`,
 };
-const testVal = ref('123');
 const form = ref({
   email: '',
   password: '',
@@ -124,7 +119,7 @@ const Login = async () => {
     .then((res) => {
       localStorage.setItem('metaWall', `Bearer ${res.data.token}`);
       localStorage.setItem('isLogin', true);
-      router.push({ name: 'post' });
+      router.push({ name: 'posts' });
     })
     .catch(() => {
       errorMessage.value = '登入失敗，帳號或密碼錯誤';

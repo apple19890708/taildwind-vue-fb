@@ -8,6 +8,11 @@ export const getAllPost = () => aepAxios({
   url: `${API_URL}/posts`,
 }).then(( data ) => data);
 
+export const getOnePost = (id) => aepAxios({
+  method: 'get',
+  url: `${API_URL}/posts/user/${id}`,
+}).then(( data ) => data);
+
 export const postNewPost = (data) => aepAxios({
   method: 'post',
 	data,
