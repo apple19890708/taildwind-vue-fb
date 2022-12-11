@@ -19,7 +19,7 @@
 			>
 				<p class="text-3xl font-bold">
 					Free $0
-					<span class="text-base text-gray-500 font-medium">per month</span>
+					<span class="text-base text-gray-500 font-medium">per months</span>
 				</p>
 				<div class="w-[30px] h-[3px] bg-primary mt-4"></div>
 				<p class="font-bold mt-8 text-lg">Plan includes</p>
