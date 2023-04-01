@@ -77,5 +77,4 @@ const openLogin = () => {
 const closeLogin = () => {
 	modal.value.classList.add('opacity-0', 'pointer-events-none')
 }
-
 </script>

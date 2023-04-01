@@ -9,7 +9,11 @@
         type="email"
         placeholder="Email"
         v-model="form.email"
+        @blur="v$.email.$touch"
       />
+      <div v-if="v$.email.$errors.length > 0" class="font-azeret text-alert">
+        {{ v$.email.$errors[0].$message }}
+      </div>
     </li>
     <li class="mb-8 w-full">
       <input
@@ -17,7 +21,14 @@
         type="password"
         placeholder="Password"
         v-model="form.password"
+        @blur="v$.password.$touch"
       />
+      <div v-if="v$.password.$errors.length > 0" class="font-azeret text-alert">
+        {{ v$.password.$errors[0].$message }}
+      </div>
+    </li>
+    <li class="mb-2 text-center text-alert">
+      <p>{{ errorMessage }}</p>
     </li>
     <li class="mb-4 w-full">
       <button
@@ -71,8 +82,8 @@
 </template>
 
 <script setup>
-// import useVuelidate from '@vuelidate/core';
-// import { required, email, helpers } from '@vuelidate/validators';
+import useVuelidate from '@vuelidate/core';
+import { required, email, helpers } from '@vuelidate/validators';
 import { ref, computed } from 'vue';
 import { signIn } from '../api'
 import { useRouter } from 'vue-router';
@@ -94,20 +105,20 @@ const form = ref({
   email: '',
   password: '',
 });
-// const rules = computed(() => ({
-//   email: {
-//     required: helpers.withMessage('email 必填', required),
-//     email: helpers.withMessage('email 格式錯誤', email),
-//   },
-//   password: {
-//     required: helpers.withMessage('密碼必填', required),
-//     alphaNum: helpers.withMessage(
-//       '密碼需至少 8 碼以上，並英數混合',
-//       helpers.regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, /\d/)
-//     ),
-//   },
-// }));
-// const v$ = useVuelidate(rules, form.value);
+const rules = computed(() => ({
+  email: {
+    required: helpers.withMessage('email 必填', required),
+    email: helpers.withMessage('email 格式錯誤', email),
+  },
+  password: {
+    required: helpers.withMessage('密碼必填', required),
+    alphaNum: helpers.withMessage(
+      '密碼需至少 8 碼以上，並英數混合',
+      helpers.regex(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, /\d/)
+    ),
+  },
+}));
+const v$ = useVuelidate(rules, form.value);
 const isSending = ref(false);
 const errorMessage = ref('');
 function resetData() {
