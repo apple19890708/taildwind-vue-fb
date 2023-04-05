@@ -41,7 +41,7 @@
 	import PostOption from '../components/home/PostOption.vue';
 	import SideMenu from '../components/home/SideMenu.vue';
   import { aepAxios } from "../api/aepBaseApi";
-  import { getProfile } from '../api'
+  import { getProfile, getUserCheck } from '../api'
   import { useUserStore } from '@/stores';
   import { useRouter } from 'vue-router';
   const userStore = useUserStore();
@@ -49,6 +49,14 @@
   const router = useRouter();
 
 aepAxios.defaults.headers.common.Authorization = localStorage.getItem('metaWall');
+  getUserCheck()
+    .then((res) => {
+      if (res.data.status) {
+        console.log('res', res.data)
+      } else {
+        router.push({ name: 'sign-in' });
+      }
+    })
   getProfile()
     .then((res) => {
       const userInfo = {

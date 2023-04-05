@@ -104,7 +104,7 @@ router.beforeEach((to, from, next) => {
       next({ name: 'sign-in' })
     }
   } else if (isLogin && to.fullPath === '/sign-in') {
-    next({ name: 'post' })
+    next({ name: 'posts' })
   } else {
     next()
   }

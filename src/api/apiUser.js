@@ -4,6 +4,11 @@ import { API_URL } from '../global/constant';
 
 // 權限管理---------------------------------------------
 
+export const getUserCheck = () => aepAxios({
+  method: 'get',
+  url: `${API_URL}/users/getUserCheck`,
+}).then(( data ) => data);
+
 export const signUp = (data) => aepAxios({
   method: 'post',
   data,
